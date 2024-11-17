@@ -51,7 +51,6 @@ namespace lab5_16
 
         private void saveStripMenuItem1_Click(object sender, EventArgs e)
         {
-            saveFileDialog1.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
             if (textBox2.Text == "")
                 saveAsStripMenuItem1_Click(sender, e);
             else
@@ -78,36 +77,78 @@ namespace lab5_16
         private void taskStripMenuItem1_Click(object sender, EventArgs e)
         {
             string[] line = textBox1.Lines;
-            string[] result = get_lines(line);
-            textBox2.Lines = result;
-        }
-
-        private string[] get_lines(string[] line)
-        {
-            int count = 0;
-            string[] result = Array.Empty<string>();
+            int count = 0, res_size = 0;
+            string[] result = new string[line.Length];
             int i = 0;
 
             while (i < line.Length)
             {
                 // разделка строки на слова
                 string[] words = line[i].Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                int count_curr = words.Distinct().Count();
+                int count_curr = CountUniqueWords(words);
                 if (count_curr > count)
                 {
                     count = count_curr;
-                    result = new string[] { line[i] };
+                    res_size = 0; 
+                    result[res_size] = line[i]; 
+                    res_size++; 
                 }
-
                 else if (count_curr == count)
                 {
-                    Array.Resize(ref result, result.Length + 1);
-                    result[result.Length - 1] = line[i];
+                    result[res_size] = line[i]; 
+                    res_size++; 
                 }
+
                 i++;
             }
 
-            return result;
+            if(res_size < result.Length)
+            {
+                string[] newResult = new string[result.Length + 1];
+                for (int j = 0; j < res_size; j++)
+                {
+                    newResult[j] = result[j];
+                }
+                result = newResult;
+            }
+
+
+            textBox2.Lines = result;
+        }
+
+        private int CountUniqueWords(string[] words)
+        {
+            string[] unique_words = new string[words.Length];
+            int count = 0;
+            int i= 0;
+
+            while (i < words.Length)
+            {
+                string word = words[i];
+
+                bool exists = false;
+
+                int j = 0;
+                while (j < count)
+                {
+                    if (unique_words[j] == word)
+                    {
+                        exists = true;
+                        break;
+                    }
+                    j++;
+                }
+
+                if (!exists)
+                {
+                    unique_words[count] = word;
+                    count++;
+                }
+
+                i++; 
+            }
+
+            return count;
         }
         private void clearStripMenuItem1_Click(object sender, EventArgs e)
         {
