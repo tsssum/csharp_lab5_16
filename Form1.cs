@@ -76,10 +76,8 @@ namespace lab5_16
 
         private void taskStripMenuItem1_Click(object sender, EventArgs e)
         {
-            string[] line = textBox1.Lines;
-            int count = 0, res_size = 0;
-            string[] result = new string[line.Length];
-            int i = 0;
+            string[] line = textBox1.Lines, result = new string[line.Length];
+            int count = 0, res_size = 0, i = 0;
 
             while (i < line.Length)
             {
@@ -104,7 +102,7 @@ namespace lab5_16
 
             if(res_size < result.Length)
             {
-                string[] newResult = new string[result.Length + 1];
+                string[] newResult = new string[res_size];
                 for (int j = 0; j < res_size; j++)
                 {
                     newResult[j] = result[j];
